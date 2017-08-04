@@ -16,6 +16,7 @@ class Main2Activity : AppCompatActivity() {
         btn_back.setOnClickListener {
             val user = intent.extras.getString("user")
             toast("Main2 Activity --- Hi I am "+user)
+            toast(KEY_USERNAME)
             val i = Intent(this@Main2Activity, MainActivity::class.java)
             i.putExtra("user",user);
             startActivity(i)

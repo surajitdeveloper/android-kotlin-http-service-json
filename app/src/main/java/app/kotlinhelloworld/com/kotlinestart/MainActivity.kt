@@ -21,6 +21,10 @@ import org.json.*
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.util.toHexString
 import com.github.kittinunf.fuel.*
+
+public val KEY_USERNAME = "sssurajit"
+
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                     result.fold({ d ->
                         val data: String = d.toString()
                         val json_obj = JSONObject(data)
-                        val output = "Response - "+data+" --- "+json_obj.get("data")
+                        val output = "Response - "+data+" --- "+json_obj.get("status")
                         result_area.text = output
                         toast(output)
 
