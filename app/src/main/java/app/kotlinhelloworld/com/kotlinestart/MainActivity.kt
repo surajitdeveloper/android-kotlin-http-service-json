@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
                 //toast(custom_url)
                 toast("Please Wait")
                 Fuel.get(custom_url).responseString { request, response, result ->
-                    //do something with response
                     result.fold({ d ->
                         val data: String = d.toString()
                         result_area.text = "Response - "+d
