@@ -17,6 +17,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import android.widget.*
 import java.lang.StringBuilder
+import org.json.*
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.util.toHexString
 import com.github.kittinunf.fuel.*
@@ -37,14 +38,15 @@ class MainActivity : AppCompatActivity() {
             }
             else
             {
-                val custom_url = "http://181.215.99.99/econstra/advicegate/service.php?todo=login&user="+username+"&password="+passwd
-                //toast("try Your entered username: "+username+" and password is: "+passwd+ "userlength: "+userlength+" Passlength: "+passlength)
-                //toast(custom_url)
+                val custom_url = "http://181.215.99.99/econstra/advicegate/service.php?todo=login&username="+username+"&password="+passwd
                 toast("Please Wait")
                 Fuel.get(custom_url).responseString { request, response, result ->
                     result.fold({ d ->
                         val data: String = d.toString()
-                        result_area.text = "Response - "+d
+                        val json_obj = JSONObject(data)
+                        val output = "Response - "+data+" --- "+json_obj.get("data")
+                        result_area.text = output
+                        toast(output)
 
                     }, { err ->
                         toast("err --- "+err)
