@@ -22,18 +22,26 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.util.toHexString
 import com.github.kittinunf.fuel.*
 
-public val KEY_USERNAME = "sssurajit"
-
+public var user_id = ""
+public var user_name = ""
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        if(user_id == "")
+        {
+            result_area.text = "Not logged in"
+        }
+        else
+        {
+            result_area.text = "logged in as "+user_name
+        }
         btn_login.setOnClickListener{
-            result_area.text = "clicl login"
+            //result_area.text = "clicl login"
             val username: String = user.text.toString()
-            val passwd: String = passwd.text.toString()
+            val passwd: String = password.text.toString()
             val userlength = username.length
             val passlength = passwd.length
             if(userlength == 0 || passlength == 0)
@@ -48,9 +56,26 @@ class MainActivity : AppCompatActivity() {
                     result.fold({ d ->
                         val data: String = d.toString()
                         val json_obj = JSONObject(data)
-                        val output = "Response - "+data+" --- "+json_obj.get("status")
-                        result_area.text = output
-                        toast(output)
+                        val service_status = json_obj.get("status")
+                        if(service_status == "success")
+                        {
+                            user.setText("")
+                            password.setText("")
+                            val service_data = json_obj.get("data").toString()
+                            val json_data_parse = JSONObject(service_data)
+                            user_id = json_data_parse.get("id").toString()
+                            user_name = json_data_parse.get("username").toString()
+                            //toast("key Global --- "+ key_user)
+                            val i = Intent(this@MainActivity, myaccount::class.java)
+                            i.putExtra("user",user_id);
+                            startActivity(i)
+                        }
+                        else
+                        {
+                            val output = json_obj.get("data").toString()
+                            result_area.text = output
+                            toast(output)
+                        }
 
                     }, { err ->
                         toast("err --- "+err)
@@ -60,11 +85,14 @@ class MainActivity : AppCompatActivity() {
 
         }
         btn_reg.setOnClickListener {
-            result_area.text = "Click Reg"
-            val user = "Surajit"
-            toast("Main Activity --- Hi I am "+user)
+            //result_area.text = "Click Reg"
+            //val user = "Surajit"
+
+            //toast("Main Activity --- Hi I am "+user)
+            user_id = "Sadhukhan"
+            //toast("key Global --- "+ key_user)
             val i = Intent(this@MainActivity, Main2Activity::class.java)
-            i.putExtra("user",user);
+            //i.putExtra("user",user);
             startActivity(i)
             finish()
         }

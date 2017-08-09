@@ -37,7 +37,7 @@
                     android:padding="10dip"
                     android:text="Password:" />
                 <EditText
-                    android:id="@+id/passwd"
+                    android:id="@+id/password"
                     android:layout_width="80dip"
                     android:layout_height="wrap_content"
                     android:padding="10dip"
