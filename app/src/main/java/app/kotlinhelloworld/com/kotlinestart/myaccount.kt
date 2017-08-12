@@ -13,6 +13,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import org.json.*
+
+/*
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationRequest;
+ */
 class myaccount : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +55,20 @@ class myaccount : AppCompatActivity() {
                             //toast(current_data)
                         }
                         activity_info.text = output_var
+                        /*
+                        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+double longitude = location.getLongitude();
+double latitude = location.getLatitude();
+private final LocationListener locationListener = new LocationListener() {
+    public void onLocationChanged(Location location) {
+        longitude = location.getLongitude();
+        latitude = location.getLatitude();
+    }
+}
+
+lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+                         */
                     }
                     else
                     {
