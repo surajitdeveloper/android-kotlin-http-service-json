@@ -24,7 +24,10 @@ import com.github.kittinunf.fuel.*
 
 public var user_id = ""
 public var user_name = ""
-
+public class service_url()
+{
+    public var service_url = "http://154.16.249.162/econstra/advicegate/service.php"
+}
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +53,8 @@ class MainActivity : AppCompatActivity() {
             }
             else
             {
-                val custom_url = "http://181.215.99.99/econstra/advicegate/service.php?todo=login&username="+username+"&password="+passwd
+                var service_url = service_url()
+                var custom_url = service_url.service_url+"?todo=login&username=$username&password=$passwd"
                 toast("Please Wait")
                 Fuel.get(custom_url).responseString { request, response, result ->
                     result.fold({ d ->

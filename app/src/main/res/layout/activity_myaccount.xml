@@ -6,20 +6,44 @@
     android:layout_height="match_parent"
     tools:context="app.kotlinhelloworld.com.kotlinestart.myaccount">
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TableLayout
+            android:layout_marginTop="40dip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:padding="10dip"
-            android:text="My account" />
-        <TextView
-            android:id="@+id/myaccountinfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:padding="10dip"
-            android:text="" />
+            android:layout_gravity="center">
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:padding="10dip"
+                    android:text="My account" />
+                <TextView
+                    android:id="@+id/myaccountinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="10dip"
+                    android:text="" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/activity_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_span="2"
+                    android:padding="10dip"
+                    android:text="test" />
+            </TableRow>
+        </TableLayout>
+        </ScrollView>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
