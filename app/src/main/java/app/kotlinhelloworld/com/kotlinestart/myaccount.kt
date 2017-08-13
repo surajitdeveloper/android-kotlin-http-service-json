@@ -30,6 +30,8 @@ import android.support.v4.app.ActivityCompat
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
 import io.vrinda.kotlinpermissions.PermissionFragment
+
+
 class myaccount : AppCompatActivity() {
     var locationManager: LocationManager? = null
     fun get_location()
@@ -41,7 +43,32 @@ class myaccount : AppCompatActivity() {
             val gps_location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             val gps_longitude = gps_location?.getLongitude()
             val gps_latitude = gps_location?.getLatitude()
-            toast("GPS Location --- "+gps_longitude.toString()+", "+gps_latitude.toString())
+            val full_location: String = gps_longitude.toString()+", "+gps_latitude.toString()
+            var service_url = service_url()
+            var custom_url = service_url.service_url
+            //var body_part: String = "{\"todo\": \"usermeta\", \"user\": \"$user_name\", \"key\": \"location\", \"value\": \"$full_location\"}"
+            Fuel.post(custom_url, listOf("todo" to "usermeta", "user" to user_name, "key" to "location", "value" to full_location)).responseString { request, response, result ->
+                //activity_info.text = "service requers - "+request.toString()+"\n\r\n\r\n\r\n\r\n service response - "+response.toString()+"\n\r\n\r service result -"+result.toString()+"\n\r"
+                //var response_record = JSONObject(response.toString())
+                result.fold({ d ->
+                    val data: String = d.toString()
+                    //toast("service data - $data")
+                    try
+                    {
+                        var service = JSONObject(data)
+                        val service_status: String = service.getString("status")
+                        toast("service - $service_status")
+                    }
+                    finally
+                    {
+                        toast("location send successfully")
+                    }
+
+                }, { err ->
+                    toast("err --- " + err)
+                })
+            }
+            toast("GPS Location --- $full_location")
 
         } catch (e: SecurityException) {
             Log.e(TAG, "Fail to request location update", e)
