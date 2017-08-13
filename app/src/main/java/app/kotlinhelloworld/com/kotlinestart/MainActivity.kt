@@ -21,9 +21,24 @@ import org.json.*
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.util.toHexString
 import com.github.kittinunf.fuel.*
-
+import android.location.Criteria
+import android.location.LocationManager
+import android.location.LocationListener
+import android.util.AttributeSet
+import android.widget.LinearLayout
+import org.json.*
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.LocationRequest
+import android.location.Location
+import android.util.Log
+import android.Manifest
+import android.Manifest.*
+import android.content.pm.PackageManager
 public var user_id = ""
 public var user_name = ""
+public val REQUEST_PERMISSION_LOCATION = 100
 public class service_url()
 {
     public var service_url = "http://154.16.249.162/econstra/advicegate/service.php"
@@ -33,6 +48,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_PERMISSION_LOCATION)
         if(user_id == "")
         {
             result_area.text = "Not logged in"

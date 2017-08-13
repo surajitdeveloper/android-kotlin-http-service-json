@@ -1,5 +1,7 @@
 package app.kotlinhelloworld.com.kotlinestart
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.*
 import com.github.kittinunf.fuel.Fuel
