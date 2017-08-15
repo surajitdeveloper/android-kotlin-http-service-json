@@ -36,10 +36,15 @@ import android.util.Log
 import android.Manifest
 import android.Manifest.*
 import android.content.pm.PackageManager
-public var user_id = ""
-public var user_name = ""
-public val REQUEST_PERMISSION_LOCATION = 100
-public class service_url()
+var user_id = ""
+var user_name = ""
+val REQUEST_PERMISSION_LOCATION = 100
+val btn: Button? = null
+val imageview: ImageView? = null
+val IMAGE_DIRECTORY = "/demonuts"
+val GALLERY = 1
+val CAMERA = 2
+class service_url()
 {
     public var service_url = "http://154.16.249.162/econstra/advicegate/service.php"
 }
@@ -48,8 +53,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_PERMISSION_LOCATION)
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA), REQUEST_PERMISSION_LOCATION)
         if(user_id == "")
         {
             result_area.text = "Not logged in"

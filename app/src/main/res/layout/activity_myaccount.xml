@@ -34,6 +34,52 @@
                     android:text="" />
             </TableRow>
             <TableRow>
+                <ImageView
+                    android:id="@+id/img_view_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:padding="10dip"
+                    android:text="" />
+                <Button
+                    android:id="@+id/takepic_camera"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="Take Picture From Camera" />
+
+            </TableRow>
+            <TableRow>
+                <ImageView
+                    android:id="@+id/img_view_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:padding="10dip"
+                    android:text="" />
+                <Button
+                    android:id="@+id/takepic_gallery"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="Take Picture From Gallery" />
+
+            </TableRow>
+            <TableRow>
+                <EditText
+                    android:id="@+id/userreq"
+                    android:layout_width="80dip"
+                    android:layout_height="wrap_content"
+                    android:padding="10dip"
+                    android:text=""/>
+                <Button
+                    android:id="@+id/sendreq"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="Send Requirement" />
+            </TableRow>
+            <TableRow>
                 <TextView
                     android:id="@+id/activity_info"
                     android:layout_width="wrap_content"

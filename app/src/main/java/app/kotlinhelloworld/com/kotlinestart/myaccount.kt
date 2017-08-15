@@ -25,20 +25,33 @@ import android.location.Location
 import android.util.Log
 import android.Manifest
 import android.Manifest.*
+import android.app.Activity
+import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
 import io.vrinda.kotlinpermissions.PermissionFragment
-
-
+import java.io.File
+import android.os.Environment
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.support.v4.content.FileProvider
+import android.widget.Toast
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+import android.widget.ImageView
+import java.io.ByteArrayOutputStream
+import java.io.FileOutputStream
 class myaccount : AppCompatActivity() {
     var locationManager: LocationManager? = null
-    fun get_location()
+    private fun get_location()
     {
         try
         {
-            var criteria = Criteria()
             locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, INTERVAL, DISTANCE, locationListeners[0])
             val gps_location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             val gps_longitude = gps_location?.getLongitude()
@@ -46,10 +59,7 @@ class myaccount : AppCompatActivity() {
             val full_location: String = gps_longitude.toString()+", "+gps_latitude.toString()
             var service_url = service_url()
             var custom_url = service_url.service_url
-            //var body_part: String = "{\"todo\": \"usermeta\", \"user\": \"$user_name\", \"key\": \"location\", \"value\": \"$full_location\"}"
             Fuel.post(custom_url, listOf("todo" to "usermeta", "user" to user_name, "key" to "location", "value" to full_location)).responseString { request, response, result ->
-                //activity_info.text = "service requers - "+request.toString()+"\n\r\n\r\n\r\n\r\n service response - "+response.toString()+"\n\r\n\r service result -"+result.toString()+"\n\r"
-                //var response_record = JSONObject(response.toString())
                 result.fold({ d ->
                     val data: String = d.toString()
                     //toast("service data - $data")
@@ -69,13 +79,25 @@ class myaccount : AppCompatActivity() {
                 })
             }
             toast("GPS Location --- $full_location")
-
         } catch (e: SecurityException) {
             Log.e(TAG, "Fail to request location update", e)
             toast("Fail to request location update --- GPS")
         } catch (e: IllegalArgumentException) {
             Log.e(TAG, "GPS provider does not exist", e)
             toast("GPS provider does not exist")
+        }
+    }
+    private  fun takePhoto() {
+        val intent1 = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (intent1.resolveActivity(packageManager) != null) {
+            startActivityForResult(intent1, REQUEST_TAKE_PHOTO)
+        }
+    }
+    private fun selectImageInAlbum() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,6 +115,13 @@ class myaccount : AppCompatActivity() {
             var custom_url = service_url.service_url
             val user_activity_url = "$custom_url?todo=activity&user=$user_name"
             myaccountinfo.text = "User activity for: $user_name"
+            //Camera section
+            takepic_camera.setOnClickListener{
+                takePhoto()
+            }
+            takepic_gallery.setOnClickListener {
+                selectImageInAlbum()
+            }
             Fuel.get(user_activity_url).responseString { request, response, result ->
                 result.fold({ d ->
                     val data: String = d.toString()
@@ -112,13 +141,6 @@ class myaccount : AppCompatActivity() {
                         }
                         activity_info.text = output_var
                         toast("reading location plz wait")
-                        /*
-                        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_LOCATION);
-                        } else {
-                            // We have already permission to use the location
-                        }
-                        */
                         if(locationManager == null)
                             locationManager = applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
                         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
@@ -132,19 +154,6 @@ class myaccount : AppCompatActivity() {
                             i.putExtra("user",user_id);
                             startActivity(i)
                         }
-                        //ActivityCompat.requestPermissions(this@myaccount,arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_PERMISSION_LOCATION)
-                        /*requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), object: PermissionCallBack {
-                            override fun permissionGranted() {
-                                super.permissionGranted()
-                                Log.v("Call permissions", "Granted")
-                            }
-
-                            override fun permissionDenied() {
-                                super.permissionDenied()
-                                Log.v("Call permissions", "Denied")
-                            }
-                        })*/
-
                     }
                     else
                     {
@@ -155,15 +164,12 @@ class myaccount : AppCompatActivity() {
                     toast("err --- " + err)
                 })
             }
-
         }
     }
-
-
-
     companion object {
         val TAG = "LocationTrackingService"
-
+        private val REQUEST_TAKE_PHOTO = 0
+        private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
         val INTERVAL = 1000.toLong() // In milliseconds
         val DISTANCE = 10.toFloat() // In meters
 
