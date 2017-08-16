@@ -39,11 +39,6 @@ import android.content.pm.PackageManager
 var user_id = ""
 var user_name = ""
 val REQUEST_PERMISSION_LOCATION = 100
-val btn: Button? = null
-val imageview: ImageView? = null
-val IMAGE_DIRECTORY = "/demonuts"
-val GALLERY = 1
-val CAMERA = 2
 class service_url()
 {
     public var service_url = "http://154.16.249.162/econstra/advicegate/service.php"

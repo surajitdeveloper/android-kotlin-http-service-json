@@ -1,9 +1,6 @@
 package app.kotlinhelloworld.com.kotlinestart
 
-import android.app.Service
 import android.content.Intent
-import android.support.v7.widget.*
-import android.support.*
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_myaccount.*
@@ -11,41 +8,15 @@ import org.jetbrains.anko.toast
 import org.json.*
 import com.github.kittinunf.fuel.Fuel
 import android.content.Context
-import android.location.Criteria
 import android.location.LocationManager
-import android.location.LocationListener
-import android.util.AttributeSet
-import android.widget.LinearLayout
-import org.json.*
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.LocationRequest
 import android.location.Location
 import android.util.Log
 import android.Manifest
-import android.Manifest.*
 import android.app.Activity
-import android.content.ContentValues
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.MediaStore
-import android.support.v4.app.ActivityCompat
-import io.vrinda.kotlinpermissions.PermissionCallBack
-import io.vrinda.kotlinpermissions.PermissionsActivity
-import io.vrinda.kotlinpermissions.PermissionFragment
-import java.io.File
-import android.os.Environment
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.support.v4.content.FileProvider
-import android.widget.Toast
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
-import android.widget.ImageView
 import java.io.ByteArrayOutputStream
-import java.io.FileOutputStream
+import android.util.Base64
 class myaccount : AppCompatActivity() {
     var locationManager: LocationManager? = null
     private fun get_location()
@@ -87,11 +58,47 @@ class myaccount : AppCompatActivity() {
             toast("GPS provider does not exist")
         }
     }
-    private  fun takePhoto() {
-        val intent1 = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent1.resolveActivity(packageManager) != null) {
-            startActivityForResult(intent1, REQUEST_TAKE_PHOTO)
+
+    private fun encodeToBase64(image: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        val imageEncoded = Base64.encodeToString(b, Base64.DEFAULT)
+        //toast("LOOK $imageEncoded")
+        return imageEncoded
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            val photo = data.extras.get("data") as Bitmap
+            img_view.setImageBitmap(photo)
+            val base64_str: String = "data:image/jpeg;base64,"+encodeToBase64(photo)
+            var service_url = service_url()
+            var custom_url = service_url.service_url
+            toast("plz wait sending image to server")
+            Fuel.post(custom_url, listOf("todo" to "usermeta", "user" to user_name, "key" to "profile_pic", "value" to base64_str)).responseString { request, response, result ->
+                result.fold({ d ->
+                    val data: String = d.toString()
+                    try
+                    {
+                        var service = JSONObject(data)
+                        val service_status: String = service.getString("status")
+                        toast("service - $service_status")
+                    }
+                    finally
+                    {
+                        toast("Image send successfully")
+                    }
+
+                }, { err ->
+                    toast("err --- " + err)
+                })
+            }
         }
+    }
+
+    private  fun takePhoto() {
+        val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, CAMERA_REQUEST)
     }
     private fun selectImageInAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -119,9 +126,11 @@ class myaccount : AppCompatActivity() {
             takepic_camera.setOnClickListener{
                 takePhoto()
             }
+            /*
             takepic_gallery.setOnClickListener {
                 selectImageInAlbum()
             }
+             */
             Fuel.get(user_activity_url).responseString { request, response, result ->
                 result.fold({ d ->
                     val data: String = d.toString()
@@ -170,6 +179,7 @@ class myaccount : AppCompatActivity() {
         val TAG = "LocationTrackingService"
         private val REQUEST_TAKE_PHOTO = 0
         private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
+        private val CAMERA_REQUEST = 1888
         val INTERVAL = 1000.toLong() // In milliseconds
         val DISTANCE = 10.toFloat() // In meters
 
