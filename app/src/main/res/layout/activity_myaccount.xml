@@ -49,17 +49,22 @@
                     android:text="Take Picture From Camera" />
 
             </TableRow>
-            <!--
+
             <TableRow>
+                <ImageView
+                    android:id="@+id/img_view_nxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:padding="10dip"
+                    android:text="" />
                 <Button
                     android:id="@+id/takepic_gallery"
                     android:layout_width="0dip"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:text="Take Picture From Gallery" />
-
             </TableRow>
-            -->
             <TableRow>
                 <EditText
                     android:id="@+id/userreq"
