@@ -1,17 +1,13 @@
 package app.kotlinhelloworld.com.kotlinestart
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.*
 import com.github.kittinunf.fuel.Fuel
 import kotlinx.android.synthetic.main.activity_main2.*
-import kotlinx.android.synthetic.main.activity_myaccount.*
-import org.jetbrains.anko.toast
 import org.json.JSONObject
 
-class Main2Activity : AppCompatActivity() {
 
+class Main2Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_myaccount.*
-import org.jetbrains.anko.toast
 import org.json.*
 import com.github.kittinunf.fuel.Fuel
 import android.content.Context
@@ -18,7 +17,6 @@ import android.graphics.Bitmap
 import java.io.ByteArrayOutputStream
 import android.util.Base64
 import android.graphics.BitmapFactory
-
 
 class myaccount : AppCompatActivity() {
     var locationManager: LocationManager? = null
