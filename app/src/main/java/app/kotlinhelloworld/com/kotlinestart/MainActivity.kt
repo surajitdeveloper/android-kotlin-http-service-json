@@ -33,31 +33,19 @@ class MainActivity : AppCompatActivity() {
 
         var handler: sqlhandler
         handler = sqlhandler(this@MainActivity)
-        /*
-        database.use {
-
-            var c = rawQuery("select COUNT(*) as count from user", null)
-            while (c.moveToNext())
-            {
-                var count = c.getString(c.getColumnIndex("count"))
-                val get_count: Int = count.toInt()
-                if (get_count > 0)
-                {
-                    var get_query = rawQuery("select * from user", null)
-                    while (get_query.moveToNext())
-                    {
-                        user_id = get_query.getString(get_query.getColumnIndex("id"))
-                        user_name = get_query.getString(get_query.getColumnIndex("username"))
-                        val i = Intent(this@MainActivity, myaccount::class.java)
-                        i.putExtra("user",user_id);
-                        startActivity(i)
-                    }
-
-                }
-            }
+        result_area.text = handler.fetch_count().toString()
+        if(handler.fetch_count() > 0)
+        {
+            var get_user: ArrayList<String> = handler.fetch_query()
+            /*get_user.forEachIndexed { index, e ->
+                toast("$e at $index")
+            }*/
+            user_id = get_user[0]
+            user_name = get_user[1]
+            val i = Intent(this@MainActivity, myaccount::class.java)
+            i.putExtra("user", app.kotlinhelloworld.com.kotlinestart.user_id);
+            startActivity(i)
         }
-
-         */
 
         btn_login.setOnClickListener{
             //result_area.text = "clicl login"
@@ -88,18 +76,11 @@ class MainActivity : AppCompatActivity() {
                             user_id = json_data_parse.get("id").toString()
                             user_name = json_data_parse.get("username").toString()
                             val user_email = json_data_parse.getString("email")
-
-                            /*
-                            database.use {
-                                val values: ContentValues
-                                values = ContentValues()
-                                values.put("id", user_id)
-                                values.put("username", user_name)
-                                values.put("email",user_email)
-                                insert("user",null,values)
-                            }
-                             */
-                            //toast("key Global --- "+ key_user)
+                            var values = ContentValues()
+                            values.put("id", user_id)
+                            values.put("username", user_name)
+                            values.put("email",user_email)
+                            handler.insert_data("user",values)
                             val i = Intent(this@MainActivity, myaccount::class.java)
                             i.putExtra("user",user_id);
                             startActivity(i)
